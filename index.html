@@ -71,19 +71,77 @@
     }
 
     .seal {
+      position: relative;
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 16px;
+      padding: 11px 18px;
       border-radius: 999px;
-      color: var(--gold);
-      border: 1px solid var(--gold-line);
-      background: var(--gold-soft);
+      color: #ffe3a0;
+      border: 1px solid rgba(255, 224, 150, 0.62);
+      background:
+        radial-gradient(circle at 14% 18%, rgba(255,255,255,0.26), transparent 18%),
+        radial-gradient(circle at 86% 72%, rgba(255,218,130,0.18), transparent 22%),
+        linear-gradient(180deg, rgba(215,180,106,0.24), rgba(255,255,255,0.045));
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.18em;
       margin-bottom: 18px;
       font-family: "Noto Sans KR", sans-serif;
+      box-shadow:
+        0 0 18px rgba(215,180,106,0.22),
+        0 12px 26px rgba(0,0,0,0.25),
+        inset 0 0 18px rgba(255,230,170,0.08);
+      overflow: hidden;
+      text-shadow:
+        0 0 6px rgba(255,226,150,0.55),
+        0 0 14px rgba(215,180,106,0.38);
+      animation: seal-glow 3s ease-in-out infinite;
+    }
+
+    .seal::before {
+      content: "";
+      position: absolute;
+      top: -55%;
+      left: -72%;
+      width: 42%;
+      height: 210%;
+      background: linear-gradient(115deg, transparent, rgba(255,255,255,0.48), transparent);
+      transform: rotate(18deg);
+      animation: seal-shimmer 3.8s ease-in-out infinite;
+    }
+
+    .seal::after {
+      content: "✦";
+      position: absolute;
+      top: 5px;
+      right: 12px;
+      color: #ffe7a3;
+      font-size: 10px;
+      text-shadow: 0 0 8px rgba(255,230,163,0.9);
+      animation: seal-twinkle 1.8s ease-in-out infinite;
+    }
+
+    .seal span {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes seal-glow {
+      0%, 100% { box-shadow: 0 0 16px rgba(215,180,106,0.20), 0 12px 26px rgba(0,0,0,0.25), inset 0 0 18px rgba(255,230,170,0.08); }
+      50% { box-shadow: 0 0 28px rgba(255,220,140,0.42), 0 14px 30px rgba(0,0,0,0.28), inset 0 0 22px rgba(255,230,170,0.14); }
+    }
+
+    @keyframes seal-shimmer {
+      0% { left: -72%; opacity: 0; }
+      18% { opacity: 0.85; }
+      42% { left: 128%; opacity: 0; }
+      100% { left: 128%; opacity: 0; }
+    }
+
+    @keyframes seal-twinkle {
+      0%, 100% { transform: scale(0.78) rotate(0deg); opacity: 0.38; }
+      50% { transform: scale(1.22) rotate(18deg); opacity: 1; }
     }
 
     h1 {
@@ -320,31 +378,91 @@
       top: 42px;
       right: 42px;
       z-index: 3;
-      min-width: 96px;
-      padding: 14px 16px;
-      border-radius: 18px;
-      border: 1px solid var(--gold-line);
-      background: linear-gradient(180deg, rgba(215,180,106,0.18), rgba(255,255,255,0.035));
+      min-width: 106px;
+      padding: 15px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 224, 150, 0.62);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255,255,255,0.32), transparent 18%),
+        radial-gradient(circle at 82% 76%, rgba(255,218,130,0.24), transparent 22%),
+        linear-gradient(180deg, rgba(215,180,106,0.24), rgba(255,255,255,0.045));
       text-align: center;
       font-family: "Noto Sans KR", sans-serif;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.26);
+      box-shadow:
+        0 0 22px rgba(215,180,106,0.28),
+        0 16px 34px rgba(0,0,0,0.32),
+        inset 0 0 20px rgba(255,230,170,0.08);
+      overflow: hidden;
+      animation: dday-glow 2.8s ease-in-out infinite;
+    }
+
+    .countdown-badge::before {
+      content: "";
+      position: absolute;
+      top: -45%;
+      left: -80%;
+      width: 52%;
+      height: 190%;
+      background: linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+      transform: rotate(18deg);
+      animation: dday-shimmer 3.4s ease-in-out infinite;
+    }
+
+    .countdown-badge::after {
+      content: "✦";
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      color: #ffe7a3;
+      font-size: 13px;
+      text-shadow: 0 0 8px rgba(255,230,163,0.9);
+      animation: dday-twinkle 1.6s ease-in-out infinite;
     }
 
     .countdown-badge .dlabel {
+      position: relative;
       display: block;
-      color: var(--muted);
+      color: #efe0bd;
       font-size: 11px;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
+      text-shadow: 0 0 8px rgba(215,180,106,0.38);
     }
 
     .countdown-badge .dvalue {
+      position: relative;
       display: block;
-      color: var(--gold);
-      font-size: 26px;
+      color: #ffe3a0;
+      font-size: 28px;
       font-weight: 900;
       line-height: 1;
+      text-shadow:
+        0 0 6px rgba(255,226,150,0.75),
+        0 0 18px rgba(215,180,106,0.55);
+      animation: dday-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dday-glow {
+      0%, 100% { box-shadow: 0 0 18px rgba(215,180,106,0.22), 0 16px 34px rgba(0,0,0,0.32), inset 0 0 20px rgba(255,230,170,0.08); }
+      50% { box-shadow: 0 0 32px rgba(255,220,140,0.48), 0 18px 38px rgba(0,0,0,0.34), inset 0 0 24px rgba(255,230,170,0.15); }
+    }
+
+    @keyframes dday-shimmer {
+      0% { left: -80%; opacity: 0; }
+      18% { opacity: 0.9; }
+      42% { left: 132%; opacity: 0; }
+      100% { left: 132%; opacity: 0; }
+    }
+
+    @keyframes dday-twinkle {
+      0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.45; }
+      50% { transform: scale(1.28) rotate(18deg); opacity: 1; }
+    }
+
+    @keyframes dday-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.045); }
     }
 
     .year-mark {
@@ -512,7 +630,7 @@
   <div class="frame">
     <section class="invitation">
       <div class="countdown-badge"><span class="dlabel">D-Day</span><span class="dvalue">D-135</span></div>
-      <div class="seal">The Golf, Travel and People Invitation</div>
+      <div class="seal"><span>THE GOLF, TRAVEL AND PEOPLE INVITATION</span></div>
       <h1>9th Bae's<br>Classic Open</h1>
       <div class="year-mark">2026 Invitational</div>
       <div class="rule"></div>
