@@ -751,6 +751,28 @@
     }
 
 
+    body.dday-emphasis .countdown-badge {
+      animation: dday-premium-pulse 0.85s ease-in-out infinite alternate, sparkle-border 2.2s linear infinite;
+      box-shadow: 0 0 28px rgba(255,226,160,0.72), 0 0 70px rgba(215,180,106,0.34), 0 18px 36px rgba(0,0,0,0.34);
+    }
+
+    body.dday-emphasis .countdown-badge .dvalue {
+      color: #fff0bf;
+      text-shadow: 0 0 8px rgba(255,240,191,0.95), 0 0 22px rgba(215,180,106,0.92), 0 0 42px rgba(215,180,106,0.52);
+    }
+
+    @keyframes dday-premium-pulse {
+      0% { transform: scale(1); filter: brightness(1); }
+      100% { transform: scale(1.055); filter: brightness(1.24); }
+    }
+
+    @keyframes sparkle-border {
+      0% { border-color: rgba(215,180,106,0.38); }
+      50% { border-color: rgba(255,235,178,0.86); }
+      100% { border-color: rgba(215,180,106,0.38); }
+    }
+
+
     .footer {
       text-align: center;
       color: var(--muted);
@@ -814,10 +836,10 @@
   <div class="opening-overlay" aria-hidden="true">
     <div class="opening-card">
       <div class="opening-kicker">Golf, Travel and People</div>
-      <div class="opening-title">OPENING</div>
+      <div class="opening-title">D-DAY</div>
       <div class="opening-subtitle">9th Bae's Classic Open 2026</div>
       <div class="opening-line"></div>
-      <div class="opening-caption">D-Day countdown · Premium BGM · Golden ceremony</div>
+      <div class="opening-caption">Nuvole Bianche · Premium Opening · Golden D-Day</div>
     </div>
   </div>
   <div class="ambient-cue">🎵 화면을 터치하거나 스크롤하면 BGM과 Opening 연출이 시작됩니다</div>
@@ -962,6 +984,10 @@
     <div class="footer">9th Bae's Classic Open 2026 · 2026.09.12 Sat - 09.13 Sun · Golf, Travel and People</div>
   </div>
 
+  <audio id="nuvoleBgm" preload="auto" loop playsinline>
+    <source src="nuvole_bianche.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     // Dynamic D-Day: recalculates from the event date in Korea time.
     function updateDday() {
@@ -982,82 +1008,60 @@
     updateDday();
     setInterval(updateDday, 1000 * 60 * 30);
 
-    // Browser-safe audio: starts naturally after the first touch / click / scroll.
-    // Uses original Web Audio tones, so the file stays self-contained and copyright-safe.
-    let audioContext;
-    let bgmTimer;
+    // Browser-safe BGM: sound starts after the first user gesture.
+    // Put your licensed/private music file named "nuvole_bianche.mp3" in the same folder as this HTML.
     let started = false;
-
-    const calmMelody = [
-      { n: 392.00, d: 0.62 }, { n: 493.88, d: 0.62 }, { n: 587.33, d: 0.92 }, { n: 493.88, d: 0.62 },
-      { n: 440.00, d: 0.62 }, { n: 523.25, d: 0.92 }, { n: 392.00, d: 0.62 }, { n: 329.63, d: 1.2 },
-      { n: 349.23, d: 0.62 }, { n: 440.00, d: 0.62 }, { n: 523.25, d: 0.92 }, { n: 440.00, d: 0.62 },
-      { n: 392.00, d: 0.62 }, { n: 493.88, d: 0.92 }, { n: 349.23, d: 0.62 }, { n: 293.66, d: 1.4 }
-    ];
-
-    const openingNotes = [
-      { n: 392.00, d: 0.22 }, { n: 493.88, d: 0.22 }, { n: 587.33, d: 0.22 }, { n: 783.99, d: 0.44 },
-      { n: 659.25, d: 0.22 }, { n: 783.99, d: 0.22 }, { n: 987.77, d: 0.50 }, { n: 1174.66, d: 0.72 }
-    ];
-
-    function tone(freq, start, duration, gainValue = 0.035, type = 'sine') {
-      const osc = audioContext.createOscillator();
-      const gain = audioContext.createGain();
-      const filter = audioContext.createBiquadFilter();
-
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, start);
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(type === 'triangle' ? 2600 : 1800, start);
-
-      gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(gainValue, start + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-
-      osc.connect(filter).connect(gain).connect(audioContext.destination);
-      osc.start(start);
-      osc.stop(start + duration + 0.04);
-    }
-
-    function scheduleOpeningFanfare() {
-      const base = audioContext.currentTime + 0.08;
-      let t = base;
-      openingNotes.forEach((note, i) => {
-        tone(note.n, t, note.d, 0.055, 'triangle');
-        tone(note.n / 2, t, note.d + 0.10, 0.028, 'sine');
-        if (i >= 3) tone(note.n * 1.5, t + 0.02, note.d * 0.8, 0.014, 'sine');
-        t += note.d + 0.025;
-      });
-    }
-
-    function scheduleCalmBgm() {
-      if (!started || !audioContext) return;
-      const base = audioContext.currentTime + 0.05;
-      let t = base;
-      calmMelody.forEach((note, i) => {
-        tone(note.n, t, note.d, 0.028, 'sine');
-        if (i % 4 === 0) tone(note.n / 2, t, note.d * 1.6, 0.016, 'sine');
-        t += note.d;
-      });
-      bgmTimer = setTimeout(scheduleCalmBgm, Math.max(1000, (t - base) * 1000));
-    }
+    const bgm = document.getElementById('nuvoleBgm');
 
     async function startExperience() {
       if (started) return;
       started = true;
+
       document.body.classList.add('sound-started', 'opening-active');
 
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioContext.state === 'suspended') await audioContext.resume();
+      if (bgm) {
+        bgm.volume = 0.42;
+        try {
+          await bgm.play();
+        } catch (error) {
+          // Most browsers block sound until a tap/click/scroll. The visual opening still runs.
+          console.warn('BGM playback was blocked or the audio file was not found.', error);
+        }
+      }
 
-      scheduleOpeningFanfare();
-      setTimeout(scheduleCalmBgm, 4100);
-      setTimeout(() => document.body.classList.remove('opening-active'), 6200);
+      setTimeout(() => {
+        document.body.classList.add('dday-emphasis');
+      }, 900);
+
+      setTimeout(() => {
+        document.body.classList.remove('opening-active');
+        document.body.classList.remove('dday-emphasis');
+      }, 6400);
 
       ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
-        window.removeEventListener(evt, startExperience, { passive: true });
+        window.removeEventListener(evt, startExperience);
       });
     }
+
+    // Try autoplay first; if blocked, start on first natural interaction without showing a button.
+    window.addEventListener('load', () => {
+      document.body.classList.add('opening-active');
+      setTimeout(() => document.body.classList.remove('opening-active'), 4200);
+      if (bgm) {
+        bgm.volume = 0.0;
+        bgm.play().then(() => {
+          let v = 0;
+          const fade = setInterval(() => {
+            v += 0.035;
+            bgm.volume = Math.min(v, 0.42);
+            if (v >= 0.42) clearInterval(fade);
+          }, 180);
+          document.body.classList.add('sound-started');
+        }).catch(() => {
+          // Expected on many mobile browsers. It will start after touch/scroll/click.
+        });
+      }
+    });
 
     ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
       window.addEventListener(evt, startExperience, { passive: true, once: true });
