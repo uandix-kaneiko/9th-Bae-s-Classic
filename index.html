@@ -474,6 +474,81 @@
       font-family: "Noto Sans KR", sans-serif;
     }
 
+
+    .slogan {
+      position: relative;
+      text-align: center;
+      margin: 28px 0 16px;
+      padding: 20px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(215,180,106,0.22);
+      background: linear-gradient(135deg, rgba(215,180,106,0.075), rgba(255,255,255,0.025));
+      overflow: hidden;
+      font-family: "Noto Sans KR", sans-serif;
+      animation: slogan-fade 1.2s ease both;
+    }
+
+    .slogan::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 90%;
+      height: 100%;
+      background: linear-gradient(110deg, transparent 0%, rgba(255,236,180,0.10) 42%, rgba(255,236,180,0.28) 50%, rgba(255,236,180,0.10) 58%, transparent 100%);
+      transform: skewX(-18deg);
+      animation: slogan-shimmer 5.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .slogan-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(215,180,106,0.74), transparent);
+      margin: 13px auto;
+      width: min(320px, 72%);
+      box-shadow: 0 0 14px rgba(215,180,106,0.28);
+    }
+
+    .slogan-text {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(16px, 2vw, 22px);
+      letter-spacing: 0.22em;
+      color: #ffe5a6;
+      line-height: 1.58;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(215,180,106,0.36), 0 0 24px rgba(215,180,106,0.18);
+    }
+
+    .slogan-text span {
+      display: inline-block;
+      font-size: clamp(12px, 1.45vw, 15px);
+      letter-spacing: 0.32em;
+      color: rgba(245,239,226,0.84);
+      margin-top: 2px;
+    }
+
+    .slogan-kor {
+      position: relative;
+      z-index: 1;
+      margin-top: 10px;
+      font-size: 15px;
+      color: var(--ivory);
+      letter-spacing: 0.06em;
+      opacity: 0.94;
+    }
+
+    @keyframes slogan-shimmer {
+      0%, 45% { left: -120%; opacity: 0; }
+      55% { opacity: 1; }
+      78%, 100% { left: 130%; opacity: 0; }
+    }
+
+    @keyframes slogan-fade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .share-note {
       margin-top: 18px;
       padding: 16px 18px;
@@ -836,8 +911,8 @@
   <div class="opening-overlay" aria-hidden="true">
     <div class="opening-card">
       <div class="opening-kicker">Golf, Travel and People</div>
-      <div class="opening-title">9th Bae's Classic Open 2026</div>
-      <div class="opening-subtitle">CYGNUS Golf Club, Make Every Shot Count</div>
+      <div class="opening-title">D-DAY</div>
+      <div class="opening-subtitle">9th Bae's Classic Open 2026</div>
       <div class="opening-line"></div>
       <div class="opening-caption">Nuvole Bianche · Premium Opening · Golden D-Day</div>
     </div>
@@ -850,6 +925,15 @@
       <h1>9th Bae's<br>Classic Open</h1>
       <div class="year-mark">2026 Invitational</div>
       <div class="rule"></div>
+      <div class="slogan">
+        <div class="slogan-line"></div>
+        <div class="slogan-text">
+          CYGNUS Golf Club<br>
+          <span>Make Every Shot Count</span>
+        </div>
+        <div class="slogan-kor">한 샷 한 샷에 가치를 담다</div>
+        <div class="slogan-line"></div>
+      </div>
       <p class="subtitle">
         아홉 번째를 맞이하는 Bae's Classic Open은 <strong>2026년 9월 12일(토)부터 9월 13일(일)까지</strong> 충주 시그너스CC와 제천 펜션에서 1박 2일 일정으로 진행됩니다.
         첫날은 2인 1팀 베스트볼, 둘째 날은 개인 스트로크 경기로 운영되며,
@@ -985,6 +1069,8 @@
   </div>
 
   <audio id="nuvoleBgm" preload="auto" loop playsinline>
+    <!-- 로컬 파일 방식: 같은 폴더에 nuvole_bianche.mp3를 넣으면 재생됩니다. -->
+    <!-- 링크 방식도 가능: 아래 src를 직접 접근 가능한 MP3 URL로 교체하세요. 예) src="https://example.com/nuvole_bianche.mp3" -->
     <source src="nuvole_bianche.mp3" type="audio/mpeg">
   </audio>
 
