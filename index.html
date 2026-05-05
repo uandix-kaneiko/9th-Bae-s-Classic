@@ -1181,10 +1181,6 @@
     </div>
   </footer>
 
-  <audio id="nuvoleBgm" preload="auto" loop playsinline>
-    <source src="nuvole_bianche.mp3" type="audio/mpeg">
-  </audio>
-
   <script>
     // D-Day counter
     function updateDday() {
@@ -1203,24 +1199,14 @@
 
     // Opening
     const overlay = document.getElementById('openingOverlay');
-    const bgm = document.getElementById('nuvoleBgm');
+    
     let started = false;
 
     function dismissOpening() {
       if (started) return;
       started = true;
       document.body.classList.add('sound-started');
-      if (bgm) {
-        bgm.volume = 0;
-        bgm.play().then(() => {
-          let v = 0;
-          const fade = setInterval(() => {
-            v = Math.min(v + 0.03, 0.42);
-            bgm.volume = v;
-            if (v >= 0.42) clearInterval(fade);
-          }, 160);
-        }).catch(() => {});
-      }
+
       ['click','touchstart','scroll','keydown'].forEach(e => window.removeEventListener(e, dismissOpening));
     }
 
@@ -1230,19 +1216,7 @@
         if (overlay) overlay.closest('body') && document.body.classList.add('opening-done');
       }, 3800);
       // Try autoplay
-      if (bgm) {
-        bgm.volume = 0;
-        bgm.play().then(() => {
-          let v = 0;
-          const fade = setInterval(() => {
-            v = Math.min(v + 0.03, 0.42);
-            bgm.volume = v;
-            if (v >= 0.42) clearInterval(fade);
-          }, 160);
-          document.body.classList.add('sound-started');
-          started = true;
-        }).catch(() => {});
-      }
+
     });
     ['click','touchstart','scroll','keydown'].forEach(e => {
       window.addEventListener(e, () => {
@@ -1251,5 +1225,200 @@
       }, { passive: true, once: true });
     });
   </script>
+
+
+  <!-- YouTube Background Music Player -->
+  <div id="yt-player-wrap" style="position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;bottom:0;left:0;z-index:-1;">
+    <div id="yt-player"></div>
+  </div>
+
+  <script>
+  (function(){
+    const VIDEO_ID = 'zp7NtW_hKJI';
+    let player = null;
+    let playerReady = false;
+    let playing = false;
+    let wantPlay = false;
+
+    // Load YouTube IFrame API
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = function() {
+      player = new YT.Player('yt-player', {
+        width: '1',
+        height: '1',
+        videoId: VIDEO_ID,
+        playerVars: {
+          autoplay: 1,
+          loop: 1,
+          playlist: VIDEO_ID,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          iv_load_policy: 3,
+          modestbranding: 1,
+          rel: 0,
+          origin: window.location.origin || 'https://localhost'
+        },
+        events: {
+          onReady: function(e) {
+            playerReady = true;
+            e.target.setVolume(72);
+            // Try autoplay immediately
+            try {
+              e.target.playVideo();
+              playing = true;
+              wantPlay = true;
+              updateBtn(true);
+            } catch(err) {}
+          },
+          onStateChange: function(e) {
+            if (e.data === YT.PlayerState.PLAYING) {
+              playing = true;
+              updateBtn(true);
+              document.body.classList.add('sound-started');
+            } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+              if (e.data === YT.PlayerState.ENDED) {
+                player.playVideo(); // loop fallback
+              }
+            }
+          },
+          onError: function(e) {
+            console.warn('YT player error', e.data);
+          }
+        }
+      });
+    };
+
+    function playMusic() {
+      wantPlay = true;
+      if (playerReady && player) {
+        try {
+          player.setVolume(72);
+          player.playVideo();
+        } catch(e) {}
+      }
+    }
+
+    function pauseMusic() {
+      wantPlay = false;
+      if (playerReady && player) {
+        try { player.pauseVideo(); } catch(e) {}
+      }
+      playing = false;
+      updateBtn(false);
+    }
+
+    // First interaction triggers play if autoplay was blocked
+    function onFirstInteraction() {
+      if (!playing && wantPlay !== false) playMusic();
+      ['click','touchstart','scroll','keydown'].forEach(evt =>
+        window.removeEventListener(evt, onFirstInteraction)
+      );
+    }
+    ['click','touchstart','scroll','keydown'].forEach(evt =>
+      window.addEventListener(evt, onFirstInteraction, { passive: true })
+    );
+
+    // Music control button
+    function updateBtn(isPlaying) {
+      const btn = document.getElementById('musicBtn');
+      if (!btn) return;
+      if (isPlaying) {
+        btn.innerHTML = '■';
+        btn.style.color = '#FAF7F2';
+        btn.title = '음악 정지';
+      } else {
+        btn.innerHTML = '♪';
+        btn.style.color = '#D4954E';
+        btn.title = '음악 재생';
+      }
+    }
+
+    function createMusicControl() {
+      const btn = document.createElement('button');
+      btn.id = 'musicBtn';
+      btn.innerHTML = '♪';
+      btn.title = '배경음악 켜기/끄기';
+      btn.style.cssText = `
+        position:fixed; bottom:22px; right:22px; z-index:999;
+        width:46px; height:46px; border-radius:50%;
+        border:1px solid rgba(192,120,40,0.55);
+        background:rgba(33,61,27,0.82);
+        color:#D4954E; font-size:19px; cursor:pointer;
+        backdrop-filter:blur(10px);
+        box-shadow:0 4px 18px rgba(0,0,0,0.32),0 0 14px rgba(192,120,40,0.16);
+        transition:all 0.25s ease;
+        display:flex; align-items:center; justify-content:center; line-height:1;
+      `;
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = 'rgba(33,61,27,0.95)';
+        btn.style.boxShadow = '0 4px 22px rgba(0,0,0,0.42),0 0 22px rgba(192,120,40,0.32)';
+        btn.style.transform = 'scale(1.08)';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = 'rgba(33,61,27,0.82)';
+        btn.style.boxShadow = '0 4px 18px rgba(0,0,0,0.32),0 0 14px rgba(192,120,40,0.16)';
+        btn.style.transform = 'scale(1)';
+      });
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (playing) {
+          pauseMusic();
+        } else {
+          playMusic();
+        }
+      });
+      document.body.appendChild(btn);
+    }
+
+    // Volume fade-in tooltip on first play
+    function showNowPlaying() {
+      const toast = document.createElement('div');
+      toast.style.cssText = `
+        position:fixed; bottom:78px; right:22px; z-index:998;
+        padding:10px 16px; border-radius:12px;
+        border:1px solid rgba(192,120,40,0.42);
+        background:rgba(33,61,27,0.88);
+        color:#F9F5EE; font-size:13px; line-height:1.45;
+        font-family:'Noto Sans KR',sans-serif;
+        backdrop-filter:blur(10px);
+        box-shadow:0 4px 18px rgba(0,0,0,0.3);
+        opacity:0; transform:translateY(6px);
+        transition:all 0.4s ease; pointer-events:none;
+        white-space:nowrap;
+      `;
+      toast.innerHTML = '🎵 그대에게 — 신해철';
+      document.body.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      });
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(6px)';
+        setTimeout(() => toast.remove(), 500);
+      }, 3200);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      createMusicControl();
+      // Show toast when music actually starts
+      const origUpdate = updateBtn;
+      let toastShown = false;
+      window.__musicPlaying = false;
+      const checkPlay = setInterval(() => {
+        if (playing && !toastShown) {
+          toastShown = true;
+          showNowPlaying();
+          clearInterval(checkPlay);
+        }
+      }, 500);
+    });
+  })();
+  </script>
+
 </body>
 </html>
