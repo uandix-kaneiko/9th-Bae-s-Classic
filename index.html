@@ -1887,6 +1887,156 @@
     }
   </style>
 
+
+  <style id="dday-topline-flow-polish">
+    /* Final luxury top-line D-Day */
+    .hero-content { padding-top: 130px !important; }
+    .dday-badge {
+      position: absolute !important;
+      top: 24px !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: auto !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      backdrop-filter: none !important;
+      overflow: visible !important;
+      pointer-events: none;
+      z-index: 8;
+    }
+    .dday-ticker-shell {
+      position: relative;
+      width: 100%;
+      height: 34px;
+      overflow: hidden;
+      padding: 6px 0;
+      background: linear-gradient(90deg, rgba(210,176,122,0.02), rgba(255,248,232,0.05) 24%, rgba(255,248,232,0.03) 76%, rgba(210,176,122,0.02));
+      box-shadow: inset 0 1px 0 rgba(255,248,232,0.05), inset 0 -1px 0 rgba(255,248,232,0.05);
+      mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0, black 6%, black 94%, transparent 100%);
+    }
+    .dday-ticker-shell::before,
+    .dday-ticker-shell::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(210,176,122,0.10) 8%,
+        rgba(240,215,155,0.84) 24%,
+        rgba(255,241,204,0.98) 50%,
+        rgba(240,215,155,0.84) 76%,
+        rgba(210,176,122,0.10) 92%,
+        transparent 100%);
+      box-shadow: 0 0 12px rgba(240,215,155,0.14);
+      pointer-events: none;
+    }
+    .dday-ticker-shell::before { top: 0; }
+    .dday-ticker-shell::after { bottom: 0; }
+    .dday-ticker-track {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ddayFlowLTR 18s linear infinite;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(244,233,211,0.82);
+      text-shadow: 0 8px 18px rgba(0,0,0,0.24);
+    }
+    @keyframes ddayFlowLTR {
+      0% { transform: translate(-38%, -50%); }
+      100% { transform: translate(104%, -50%); }
+    }
+    .dday-label,
+    .dday-value,
+    .dday-inline-copy,
+    .dday-inline-sep {
+      display: inline-block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      color: inherit !important;
+      font-size: inherit !important;
+      line-height: 1.2 !important;
+      letter-spacing: inherit !important;
+    }
+    .dday-label { opacity: .68; }
+    .dday-value {
+      font-family: "Playfair Display", Georgia, serif !important;
+      font-size: 22px !important;
+      font-weight: 700;
+      letter-spacing: -0.02em !important;
+      color: #F0D79B !important;
+      transform: translateY(-0.03em);
+      text-shadow: 0 10px 24px rgba(0,0,0,0.32), 0 0 18px rgba(240,215,155,0.10);
+    }
+    .dday-inline-sep { opacity: .48; }
+    .dday-inline-copy { opacity: .94; }
+
+    .hero-title-row {
+      gap: 0.12em !important;
+      align-items: center !important;
+    }
+    .hero-title-emblem-wrap {
+      width: 0.58em !important;
+      height: 0.58em !important;
+      transform: translateY(0.03em) !important;
+      margin-left: 0.02em;
+    }
+    .hero-title-emblem {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.26)) !important;
+      object-fit: contain;
+    }
+
+    @media (max-width: 760px) {
+      .hero-content { padding-top: 104px !important; }
+      .dday-badge { top: 14px !important; }
+      .dday-ticker-shell {
+        height: 27px;
+        padding: 4px 0;
+      }
+      .dday-ticker-track {
+        gap: 10px;
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        animation-duration: 14s;
+      }
+      .dday-value { font-size: 17px !important; }
+      .hero-title-row { gap: 0.10em !important; }
+      .hero-title-emblem-wrap {
+        width: 0.54em !important;
+        height: 0.54em !important;
+        transform: translateY(0.03em) !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .dday-ticker-track {
+        font-size: 8px;
+        gap: 8px;
+        animation-duration: 13s;
+      }
+      .dday-value { font-size: 15px !important; }
+      .hero-title-emblem-wrap { width: 0.52em !important; height: 0.52em !important; }
+    }
+  </style>
+
 </head>
 <body class="sound-started">
 
@@ -1912,10 +2062,20 @@
     <div class="hero-stripe"></div>
     <div class="hero-bg-num">9</div>
     <div class="wrap hero-content">
-      <!-- D-DAY -->
-      <div class="dday-badge" data-event-date="2026-09-12T00:00:00+09:00">
-        <div class="dday-label">D-Day</div>
-        <div class="dday-value">D-000</div>
+      <!-- D-DAY TOP FLOW -->
+      <div class="dday-badge dday-topline" data-event-date="2026-09-12T00:00:00+09:00">
+        <div class="dday-ticker-shell" aria-hidden="true">
+          <div class="dday-ticker-track">
+            <span class="dday-label">D-Day</span>
+            <span class="dday-value">D-000</span>
+            <span class="dday-inline-sep">·</span>
+            <span class="dday-inline-copy">2026.09.12 Sat – 09.13 Sun</span>
+            <span class="dday-inline-sep">·</span>
+            <span class="dday-inline-copy">충주 시그너스CC</span>
+            <span class="dday-inline-sep">·</span>
+            <span class="dday-inline-copy">Make Every Shot Count</span>
+          </div>
+        </div>
       </div>
       <div class="hero-kicker">
         <div class="hero-kicker-line"></div>
@@ -2299,7 +2459,7 @@
     // D-Day counter
     function updateDday() {
       const badge = document.querySelector('.dday-badge');
-      const value = document.querySelector('.dday-value');
+      const value = badge ? badge.querySelector('.dday-value') : null;
       const openingValue = document.getElementById('openingDdayValue');
       if (!badge || !value) return;
       const eventDate = new Date(badge.dataset.eventDate);
